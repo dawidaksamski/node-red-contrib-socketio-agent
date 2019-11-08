@@ -1,4 +1,4 @@
-# node-red-contrib-socketio-client-with-emitter
+# node-red-contrib-socketio-agent
 ---
 
 ## Nodes
