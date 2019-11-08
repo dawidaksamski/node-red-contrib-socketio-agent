@@ -1,0 +1,31 @@
+{
+  "name": "node-red-contrib-socketio-agent",
+  "version": "0.1.0",
+  "description": "Node Red client to work with socket.io server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dawidaksamski/node-red-contrib-socketio-agent.git"
+  },
+  "keywords": [
+    "node-red",
+    "socket.io"
+  ],
+  "author": "Dawid Aksamski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dawidaksamski/node-red-contrib-socketio-agent/issues"
+  },
+  "homepage": "https://github.com/dawidaksamski/node-red-contrib-socketio-agent#readme",
+  "dependencies": {
+    "socket.io-client": "^2.3.0"
+  },
+  "node-red": {
+    "nodes": {
+      "socketio-client": "socketio-client/socketio-client.js"
+    }
+  }
+}
