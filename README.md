@@ -14,3 +14,5 @@
 2. Configure server (connection URI)
 3. Set 'Event name' on which you want to listen or emit messages
 4. Optionally set node's name
+
+**Notice** This module is in development phase.
