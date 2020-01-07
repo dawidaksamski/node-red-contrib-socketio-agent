@@ -20,7 +20,7 @@ module.exports = function(RED) {
         this.eventName = config.eventname;
         
         var server = RED.nodes.getNode(config.server);
-        this.socket = connect(server.uri, JSON.parse(server.options));
+        this.socket = connect(server.uri, JSON.parse(server.options || '{}'));
 
         var node = this;
 
