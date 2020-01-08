@@ -8,6 +8,10 @@
           uri: {
               value: 'http://localhost:3000',
               required: true
+          },
+          options: {
+              value: '{ "forceNew": true }',
+              required: false
           }
       },
       label: function() {
@@ -20,6 +24,10 @@
   <div class="form-row">
     <label for="node-config-input-uri"><i class="fa fa-globe"></i> URI</label>
     <input type="text" id="node-config-input-uri">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-options"><i class="fa fa-globe"></i> Options</label>
+    <input type="text" id="node-config-input-options">
   </div>
 </script>
 

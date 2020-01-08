@@ -1,14 +1,15 @@
 module.exports = function(RED) {
     'use strict';
 
-    function connect(uri) {
-        return require('socket.io-client')(uri);
+    function connect(uri, options) {
+        return require('socket.io-client')(uri, options);
     }
 
     /* socket config */
     function SocketIOConfig(config) {
         RED.nodes.createNode(this, config);
         this.uri = config.uri;
+        this.options = config.options;
     }
     RED.nodes.registerType('socketio-config', SocketIOConfig);
    
@@ -19,7 +20,7 @@ module.exports = function(RED) {
         this.eventName = config.eventname;
         
         var server = RED.nodes.getNode(config.server);
-        this.socket = connect(server.uri);
+        this.socket = connect(server.uri, JSON.parse(server.options || '{}'));
 
         var node = this;
 
