@@ -10,41 +10,36 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
         this.uri = config.uri;
         this.options = config.options;
+        this.socket = connect(config.uri, JSON.parse(config.options || '{}'));
     }
     RED.nodes.registerType('socketio-config', SocketIOConfig);
    
     /* sckt listener*/
     function SocketIOListener(config) {
         RED.nodes.createNode(this, config);
-        this.name = config.name;
-        this.eventName = config.eventname;
+        const node = this;
         
-        var server = RED.nodes.getNode(config.server);
-        this.socket = connect(server.uri, JSON.parse(server.options || '{}'));
+        const server = RED.nodes.getNode(config.server);
+        const socket = server.socket
 
-        var node = this;
-
-        this.socket.on('connect', function() {
+        socket.on('connect', function() {
             node.status({ fill: 'green', shape: 'dot', text: 'connected' });
         });
 
-        this.socket.on('disconnect', function () {
+        socket.on('disconnect', function () {
             node.status({ fill: 'red', shape: 'ring', text: 'disconnected' });
         });
 
-        this.socket.on('connect_error', function(err) {
-            if (err) {
-                node.status({ fill: 'red', shape: 'ring', text: 'error' });
-                node.send({ payload: err });
-            }
+        socket.on('connect_error', function(err) {
+            node.status({ fill: 'red', shape: 'ring', text: 'error' });
         });
 
-        this.socket.on(node.eventName, function (data) {
-            node.send({ payload: data });
+        socket.on(config.eventname, function (data) {
+            node.send({ topic: config.eventname, payload: data });
         })
 
         node.on('close', function (done) {
-            node.socket.disconnect();
+            socket.disconnect();
             node.status({});
             done();
         });
@@ -54,34 +49,27 @@ module.exports = function(RED) {
     /* sckt emitter*/
     function SocketIOEmitter(config) {
         RED.nodes.createNode(this, config);
-        this.name = config.name;
-        this.eventName = config.eventname;
+        const node = this;
+        const server = RED.nodes.getNode(config.server);
+        
+        const socket = server.socket
 
-        var server = RED.nodes.getNode(config.server);
-        this.socket = connect(server.uri);
-
-        var node = this;
-
-        this.socket.on('connect', function() {
+        socket.on('connect', function() {
             node.status({ fill: 'green', shape: 'dot', text: 'connected' });
         });
 
-        this.socket.on('disconnect', function () {
+        socket.on('disconnect', function () {
             node.status({ fill: 'red', shape: 'ring', text: 'disconnected' });
         });
 
-        this.socket.on('connect_error', function(err) {
-            if (err) {
-                node.status({ fill: 'red', shape: 'ring', text: 'error' });
-                node.send({ payload: err });
-            }
+        socket.on('connect_error', function(err) {
+            node.status({ fill: 'red', shape: 'ring', text: 'error' });
         });
 
         node.on('input', function (msg) {
-            const data = msg.payload;
-            if (data) {
-                node.socket.emit(node.eventName, data);
-            }
+            const data = msg.payload 
+                || (config.messageType == 'json' ? JSON.parse(config.message) : config.message)
+            socket.emit(config.eventname, data);
         });
 
         node.on('close', function (done) {
