@@ -99,12 +99,25 @@
           eventname: {
               value: ''
           },
+          message: {
+              value: ''
+          },
+          messageType: {
+            value: 'str'
+          },
           name: {
               value: ''
           }
       },
       label: function() {
           return this.name || this.eventname || 'Socket.IO Emitter';
+      },
+      oneditprepare: function() {
+        $("#node-input-message").typedInput({
+            type:"str",
+            types:["str", "json"],
+            typeField: "#node-input-messageType"
+        })
       }
   });
 </script>
@@ -119,7 +132,12 @@
       <input type="text" id="node-input-eventname" placeholder="Event name">
     </div>
     <div class="form-row">
-      <label for="node-input-name">Message</label>
+      <label for="node-input-message">Message</label>
+      <input type="text" id="node-input-message" placeholder="Message">
+      <input type="hidden" id="node-input-messageType">
+    </div>
+    <div class="form-row">
+      <label for="node-input-name">Name</label>
       <input type="text" id="node-input-name" placeholder="Name">
     </div>
 </script>
